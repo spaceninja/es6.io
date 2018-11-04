@@ -6,6 +6,8 @@
 </head>
 <body>
 
+<h1>Total Time: <span id="total">0</span></h1>
+
 <ul>
   <li data-time="5:17">Flexbox Video</li>
   <li data-time="8:22">Flexbox Video</li>
@@ -32,16 +34,34 @@
 <script>
 
   // Select all the list items on the page and convert to array
+  const listItems = Array.from(document.querySelectorAll('[data-time]'));
+  console.log(listItems);
 
   // Filter for only the elements that contain the word 'Flexbox'
+  const flexItems = listItems.filter(item => item.innerHTML.includes('Flexbox'));
+  console.log(flexItems);
 
   // map down to a list of time strings
+  const timeItems = flexItems.map(item => item.dataset.time);
+  console.log(timeItems);
 
   // map to an array of seconds
+  const seconds = timeItems.map(item => {
+    const split = item.split(':');
+    const min = split[0];
+    const sec = split[1];
+    return Number(min * 60) + Number(sec);
+  });
+  console.log(seconds);
 
   // reduce to get total
+  const total = seconds.reduce((a,c) => a+c);
+  console.log(total);
 
   // 🔥 This can also be done in a single .reduce(), but we're practicing arrow functions here, so chain them!
+  const totalMins = total / 60;
+  console.log(totalMins.toFixed(2));
+  document.getElementById('total').innerHTML = totalMins.toFixed(2);
 
 </script>
 </body>
