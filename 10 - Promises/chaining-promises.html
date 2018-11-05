@@ -18,39 +18,45 @@
     { name: 'Addy Osmani', twitter: '@addyosmani', bio: 'Googler' },
   ];
 
-  function getPostById(id) {
+  const getPostById = id => {
     // create a new promise
     return new Promise((resolve, reject) => {
-      // using a settimeout to mimick a databse
+      // use setTimeout to mimic database lookup
       setTimeout(() => {
         // find the post we want
         const post = posts.find(post => post.id === id);
         if(post) {
-          resolve(post); // send the post back
+          resolve(post); // send post back
         } else {
-          reject(Error('No Post Was Found!'));
+          reject(Error('No post was found'));
         }
-      }, 200);
+      }, 2000);
     });
   }
 
-  function hydrateAuthor(post) {
+  const hydrateAuthor = post => {
     // create a new promise
     return new Promise((resolve, reject) => {
-      // find the author
-      const authorDetails = authors.find(person => person.name === post.author);
-      if(authorDetails) {
-        // "hydrate" the post object with the author object
-        post.author = authorDetails;
-        resolve(post);
-      } else {
-        reject(Error('Can not find the author'));
-      }
+      // use setTimeout to mimic another database call
+      setTimeout(() => {
+        // find the author we want
+        const authorDetails = authors.find(person => person.name === post.author);
+        if(authorDetails) {
+          post.author = authorDetails; // hydrate the post with the author object
+          resolve(post);
+        } else {
+          reject(Error('Can not find the author'));
+        }
+      }, 2000);
     });
   }
 
+  // this has two .then
+  // 1. is due to the Promise returned from getPostById
+  // 2. is due to the Promise returned from getPostById.then
   getPostById(3)
     .then(post => {
+      console.log(post);
       return hydrateAuthor(post);
     })
     .then(post => {
@@ -58,9 +64,7 @@
     })
     .catch(err => {
       console.error(err);
-    });
-
-
+    })
 
 </script>
 </body>
